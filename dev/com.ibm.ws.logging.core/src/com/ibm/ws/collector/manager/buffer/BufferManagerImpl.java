@@ -113,8 +113,11 @@ public class BufferManagerImpl extends BufferManager {
 	}
 
 	public void addHandler(String handlerId) {
-		//New Asynchronous handler starts off with all events from EMQ
-		ringBuffer = new Buffer<Object>(10000);
+		//If it is first async handler subscribed, then create the main buffer
+		if(ringBuffer == null) {
+			ringBuffer = new Buffer<Object>(10000);
+		}
+		//Every new Asynchronous handler starts off with all events from EMQ
 		Object holder[] = new Object[1000];
 		Object[] messagesList = earlyMessageQueue.toArray(holder);
 		for(Object message: messagesList) {
@@ -126,7 +129,6 @@ public class BufferManagerImpl extends BufferManager {
 	public synchronized void addSyncHandler(SynchronousHandler syncHandler) {
 		//Send messages from EMQ to synchronous handler when it subscribes to receive messages
 		if(!earlyMessageQueue.isEmpty() && !synchronizedHandlerSet.contains(syncHandler)) {
-			synchronizedHandlerSet.add(syncHandler);
 			System.out.println("Sending Early Messages to New Synchronized Handler: " + syncHandler.getHandlerName());
 			Object holder[] = new Object[1000];
 			Object[] messagesList = earlyMessageQueue.toArray(holder);
@@ -134,6 +136,7 @@ public class BufferManagerImpl extends BufferManager {
 				syncHandler.synchronousWrite(message);
 			}
 		}
+		synchronizedHandlerSet.add(syncHandler);
 	}
 	
 	public void removeSyncHandler(SynchronousHandler syncHandler) {
