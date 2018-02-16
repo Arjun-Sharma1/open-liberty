@@ -12,6 +12,8 @@ package com.ibm.ws.microprofile.metrics11.impl;
 
 import javax.enterprise.inject.Vetoed;
 
+import org.eclipse.microprofile.config.Config;
+import org.eclipse.microprofile.config.spi.ConfigProviderResolver;
 import org.eclipse.microprofile.metrics.Metadata;
 import org.eclipse.microprofile.metrics.Metric;
 import org.eclipse.microprofile.metrics.MetricRegistry;
@@ -50,7 +52,22 @@ public class MetricRegistry11Impl extends MetricRegistryImpl {
         for (String tag : metadata.getTags().keySet()) {
             metadataCopy.getTags().put(tag, metadata.getTags().get(tag));
         }
+        metadataCopy.setTags(metadata.getTags());
         metadataCopy.setReusable(metadata.isReusable());
+
+        //Append global tags to the metric
+        Config config = ConfigProviderResolver.instance().getConfig(Thread.currentThread().getContextClassLoader());
+        try {
+            String[] globaltags = config.getValue("MP_METRICS_TAGS", String.class).split(",");
+            String currentTags = metadataCopy.getTagsAsString();
+            for (String tag : globaltags) {
+                if (!currentTags.contains(tag.split("=")[0])) {
+                    metadataCopy.addTag(tag);
+                }
+            }
+        } catch (Exception e) {
+        }
+
         final Metric existing = metrics.putIfAbsent(metadata.getName(), metric);
         this.metadata.putIfAbsent(metadata.getName(), metadataCopy);
         if (existing == null) {
