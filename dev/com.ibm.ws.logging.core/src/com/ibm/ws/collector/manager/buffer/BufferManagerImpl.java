@@ -185,6 +185,7 @@ public class BufferManagerImpl extends BufferManager {
         } finally {
             RERWLOCK.writeLock().unlock();
         }
+        synchronousHandlerSet=new HashSet<SynchronousHandler>();
     }
 
     public void removeSyncHandler(SynchronousHandler syncHandler) {
