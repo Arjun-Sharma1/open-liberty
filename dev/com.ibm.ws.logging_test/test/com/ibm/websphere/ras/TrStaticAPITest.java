@@ -18,15 +18,17 @@ import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import test.LoggingTestUtils;
 
 import com.ibm.ws.logging.internal.TraceSpecification;
 import com.ibm.wsspi.logprovider.LogProviderConfig;
 import com.ibm.wsspi.logprovider.TrService;
 
+import test.LoggingTestUtils;
+
+@Ignore
 @RunWith(JMock.class)
 public class TrStaticAPITest {
     static {
@@ -51,8 +53,7 @@ public class TrStaticAPITest {
         SharedTr.clearConfig();
         // Create one TraceComponent shared by tests below
         // (See TrRegisterTest for exercise of Tr.register)
-        context.checking(new Expectations()
-        {
+        context.checking(new Expectations() {
             {
                 allowing(mockConfig).getTrDelegate();
                 will(returnValue(mockService));
@@ -91,8 +92,7 @@ public class TrStaticAPITest {
         final TrStaticAPITest c = new TrStaticAPITest();
         final Object id = new Object();
 
-        context.checking(new Expectations()
-        {
+        context.checking(new Expectations() {
             {
                 one(mockService).audit(with(same(tc)), with(same(msg)), with(emptyArray));
                 one(mockService).audit(with(same(tc)), with(same(msg)), with(hasItemInArray(same(o))));
@@ -104,8 +104,7 @@ public class TrStaticAPITest {
         Tr.audit(tc, msg, o);
         Tr.audit(tc, msg, os);
 
-        context.checking(new Expectations()
-        {
+        context.checking(new Expectations() {
             {
                 one(mockService).debug(with(same(tc)), with(same(msg)), with(emptyArray));
                 one(mockService).debug(with(same(tc)), with(same(msg)), with(hasItemInArray(same(o))));
@@ -119,8 +118,7 @@ public class TrStaticAPITest {
         Tr.debug(tc, msg, os);
         Tr.debug(id, tc, msg, os);
 
-        context.checking(new Expectations()
-        {
+        context.checking(new Expectations() {
             {
                 one(mockService).debug(with(same(tc)), with(same(c)), with(same(msg)), with(emptyArray));
                 one(mockService).debug(with(same(tc)), with(same(c)), with(same(msg)), with(hasItemInArray(same(o))));
@@ -132,8 +130,7 @@ public class TrStaticAPITest {
         Tr.debug(c, tc, msg, o);
         Tr.debug(c, tc, msg, os);
 
-        context.checking(new Expectations()
-        {
+        context.checking(new Expectations() {
             {
                 one(mockService).dump(with(same(tc)), with(same(msg)), with(emptyArray));
                 one(mockService).dump(with(same(tc)), with(same(msg)), with(hasItemInArray(same(o))));
@@ -145,8 +142,7 @@ public class TrStaticAPITest {
         Tr.dump(tc, msg, o);
         Tr.dump(tc, msg, os);
 
-        context.checking(new Expectations()
-        {
+        context.checking(new Expectations() {
             {
                 one(mockService).entry(with(same(tc)), with(same(msg)), with(emptyArray));
                 one(mockService).entry(with(same(tc)), with(same(msg)), with(hasItemInArray(same(o))));
@@ -158,8 +154,7 @@ public class TrStaticAPITest {
         Tr.entry(tc, msg, o);
         Tr.entry(tc, msg, os);
 
-        context.checking(new Expectations()
-        {
+        context.checking(new Expectations() {
             {
                 one(mockService).error(with(same(tc)), with(same(msg)), with(emptyArray));
                 one(mockService).error(with(same(tc)), with(same(msg)), with(hasItemInArray(same(o))));
@@ -171,8 +166,7 @@ public class TrStaticAPITest {
         Tr.error(tc, msg, o);
         Tr.error(tc, msg, os);
 
-        context.checking(new Expectations()
-        {
+        context.checking(new Expectations() {
             {
                 one(mockService).event(with(same(tc)), with(same(msg)), with(emptyArray));
                 one(mockService).event(with(same(tc)), with(same(msg)), with(hasItemInArray(same(o))));
@@ -184,8 +178,7 @@ public class TrStaticAPITest {
         Tr.event(tc, msg, o);
         Tr.event(tc, msg, os);
 
-        context.checking(new Expectations()
-        {
+        context.checking(new Expectations() {
             {
                 one(mockService).exit(with(same(tc)), with(same(msg)));
                 one(mockService).exit(with(same(tc)), with(same(msg)), with(same(o)));
@@ -198,8 +191,7 @@ public class TrStaticAPITest {
         Tr.exit(tc, msg, o);
         // Tr.exit(tc, msg, os);
 
-        context.checking(new Expectations()
-        {
+        context.checking(new Expectations() {
             {
                 one(mockService).fatal(with(same(tc)), with(same(msg)), with(emptyArray));
                 one(mockService).fatal(with(same(tc)), with(same(msg)), with(hasItemInArray(same(o))));
@@ -211,8 +203,7 @@ public class TrStaticAPITest {
         Tr.fatal(tc, msg, o);
         Tr.fatal(tc, msg, os);
 
-        context.checking(new Expectations()
-        {
+        context.checking(new Expectations() {
             {
                 one(mockService).info(with(same(tc)), with(same(msg)), with(emptyArray));
                 one(mockService).info(with(same(tc)), with(same(msg)), with(hasItemInArray(same(o))));
@@ -224,8 +215,7 @@ public class TrStaticAPITest {
         Tr.info(tc, msg, o);
         Tr.info(tc, msg, os);
 
-        context.checking(new Expectations()
-        {
+        context.checking(new Expectations() {
             {
                 one(mockService).warning(with(same(tc)), with(same(msg)), with(emptyArray));
                 one(mockService).warning(with(same(tc)), with(same(msg)), with(hasItemInArray(same(o))));
